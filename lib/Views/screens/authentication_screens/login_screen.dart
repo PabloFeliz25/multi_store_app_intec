@@ -5,9 +5,10 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:multi_store_app_intec/Views/screens/authentication_screens/register_screen.dart';
 import 'package:multi_store_app_intec/Views/screens/authentication_screens/reset_password_screen.dart';
 
-import '../../../Controllers/auth_controller.dart';
-import '../main_screen.dart';
 
+import '../../../Controllers/auth_controller.dart';
+import '../../../Vendedors/AuthScreen/VendorAuthScreen.dart';
+import '../main_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -33,10 +34,8 @@ class _LoginScreenState extends State<LoginScreen> {
   void initState() {
     super.initState();
 
-    // Use authStateChanges to listen to the user's login status
     FirebaseAuth.instance.authStateChanges().listen((User? user) {
       if (user != null) {
-        // If a user is logged in, navigate to the MainScreen
         Future.delayed(Duration.zero, () {
           Navigator.pushReplacement(
               context,
@@ -112,12 +111,9 @@ class _LoginScreenState extends State<LoginScreen> {
                   const SizedBox(height: 40.0),
                   TextFormField(
                     controller: emailController,
-                    keyboardType: TextInputType
-                        .emailAddress, // Ensure the right input type
-                    autocorrect:
-                    false, // Disable autocorrect to avoid unwanted modes
-                    enableSuggestions:
-                    false, // Disable suggestions to avoid handwriting
+                    keyboardType: TextInputType.emailAddress,
+                    autocorrect: false,
+                    enableSuggestions: false,
                     decoration: InputDecoration(
                       labelText: 'Enter your email',
                       hintText: 'user@example.com',
@@ -169,7 +165,6 @@ class _LoginScreenState extends State<LoginScreen> {
                     },
                   ),
                   const SizedBox(height: 10.0),
-                  // Forgot Password Navigation
                   Align(
                     alignment: Alignment.centerRight,
                     child: TextButton(
@@ -177,8 +172,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) =>
-                              ResetPasswordScreen(),
+                              builder: (context) => ResetPasswordScreen(),
                             ));
                       },
                       child: Text(
@@ -261,6 +255,28 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ),
                     ],
+                  ),
+                  const SizedBox(height: 10.0),
+                  // Add "Log in as a Vendor" link
+                  InkWell(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const VendorAuthScreen(),
+                        ),
+                      );
+                    },
+                    child: Text(
+                      'Log in as a Vendor',
+                      style: GoogleFonts.lato(
+                        textStyle: const TextStyle(
+                          color: Colors.blue,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 14,
+                        ),
+                      ),
+                    ),
                   ),
                 ],
               ),
